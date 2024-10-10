@@ -1,18 +1,20 @@
 import { BasicStatus, PermissionType } from './enum';
 
 export interface UserToken {
-  accessToken?: string;
-  refreshToken?: string;
+  token?: string;
 }
 
 export interface UserInfo {
   id: string;
-  email: string;
   username: string;
-  password?: string;
+  email?: string;
+  phone?: string;
   avatar?: string;
-  role?: Role;
-  status?: BasicStatus;
+  role_id: number;
+  gender?: string;
+  deleted?: boolean;
+  updated_at: string;
+  created_at: string;
   permissions?: Permission[];
 }
 

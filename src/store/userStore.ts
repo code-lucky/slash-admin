@@ -59,9 +59,14 @@ export const useSignIn = () => {
   const signIn = async (data: SignInReq) => {
     try {
       const res = await signInMutation.mutateAsync(data);
-      const { user, accessToken, refreshToken } = res;
-      setUserToken({ accessToken, refreshToken });
+      console.log('res', res);
+      const { user, token } = res;
+      setUserToken({ token });
       setUserInfo(user);
+      console.log('user', user);
+      console.log('token', token);
+      console.log('HOMEPAGE', HOMEPAGE);
+
       navigatge(HOMEPAGE, { replace: true });
     } catch (err) {
       message.warning({

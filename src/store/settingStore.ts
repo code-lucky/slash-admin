@@ -23,10 +23,10 @@ type SettingStore = {
 
 const useSettingStore = create<SettingStore>((set) => ({
   settings: getItem<SettingsType>(StorageEnum.Settings) || {
-    themeColorPresets: ThemeColorPresets.Default,
+    themeColorPresets: ThemeColorPresets.Purple,
     themeMode: ThemeMode.Light,
     themeLayout: ThemeLayout.Vertical,
-    themeStretch: false,
+    themeStretch: true,
     breadCrumb: true,
     multiTab: true,
   },
