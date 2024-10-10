@@ -22,7 +22,7 @@ function Login() {
   console.log('HOMEPAGE', HOMEPAGE);
 
   // 判断用户是否有权限
-  if (!token.token) {
+  if (token.token) {
     // 如果有授权，则跳转到首页
     return <Navigate to={HOMEPAGE} replace />;
   }
