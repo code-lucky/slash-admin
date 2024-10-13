@@ -18,16 +18,16 @@ function UserAccount() {
       ),
       children: <GeneralTab />,
     },
-    {
-      key: '2',
-      label: (
-        <div className="flex items-center">
-          <Iconify icon="solar:bell-bing-bold-duotone" size={24} className="mr-2" />
-          <span>Notifications</span>
-        </div>
-      ),
-      children: <NotificationsTab />,
-    },
+    // {
+    //   key: '2',
+    //   label: (
+    //     <div className="flex items-center">
+    //       <Iconify icon="solar:bell-bing-bold-duotone" size={24} className="mr-2" />
+    //       <span>Notifications</span>
+    //     </div>
+    //   ),
+    //   children: <NotificationsTab />,
+    // },
     {
       key: '3',
       label: (

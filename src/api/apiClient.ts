@@ -2,10 +2,12 @@ import { message as Message } from 'antd';
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
 
 import { t } from '@/locales/i18n';
-import userStore from '@/store/userStore';
 
 import { Result } from '#/api';
-import { ResultEnum } from '#/enum';
+import { ResultEnum, StorageEnum } from '#/enum';
+import { getItem } from '@/utils/storage';
+import { UserToken } from '#/entity';
+const token = getItem<UserToken>(StorageEnum.Token);
 
 // 创建 axios 实例
 const axiosInstance = axios.create({
@@ -17,8 +19,10 @@ const axiosInstance = axios.create({
 // 请求拦截
 axiosInstance.interceptors.request.use(
   (config) => {
-    // 在请求被发送之前做些什么
-    config.headers.Authorization = 'Bearer Token';
+    console.log('token', token);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token.token}`;
+    }
     return config;
   },
   (error) => {
@@ -35,7 +39,6 @@ axiosInstance.interceptors.response.use(
     const { code, data, message } = res.data;
     // 业务请求成功
     const hasSuccess = data && Reflect.has(res.data, 'code') && code === ResultEnum.SUCCESS;
-    console.log('data', data);
     if (hasSuccess) {
       
       return data;

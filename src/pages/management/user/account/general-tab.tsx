@@ -3,7 +3,7 @@ import { App, Button, Col, Form, Input, Row, Space, Switch } from 'antd';
 
 import Card from '@/components/card';
 import { UploadAvatar } from '@/components/upload';
-import { useUserInfo } from '@/store/userStore';
+import { useUserInfo, useGetUserInfo } from '@/store/userStore';
 
 type FieldType = {
   name?: string;
@@ -15,16 +15,18 @@ type FieldType = {
   about: string;
 };
 export default function GeneralTab() {
+  useGetUserInfo()
   const { notification } = App.useApp();
-  const { avatar, username, email } = useUserInfo();
+  
+  const userInfo = useUserInfo();
+  
+  const { avatar } = userInfo;
+
   const initFormValues = {
-    name: username,
-    email,
-    phone: faker.phone.number(),
+    name: userInfo.username,
+    email: userInfo.email,
+    phone: userInfo.phone,
     address: faker.location.county(),
-    city: faker.location.city(),
-    code: faker.location.zipCode(),
-    about: faker.lorem.paragraphs(),
   };
   const handleClick = () => {
     notification.success({
@@ -75,29 +77,7 @@ export default function GeneralTab() {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item<FieldType> label="Address" name="address">
-                  <Input />
-                </Form.Item>
-              </Col>
             </Row>
-
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item<FieldType> label="City" name="city">
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item<FieldType> label="Code" name="code">
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Form.Item<FieldType> label="About" name="about">
-              <Input.TextArea />
-            </Form.Item>
 
             <div className="flex w-full justify-end">
               <Button type="primary" onClick={handleClick}>

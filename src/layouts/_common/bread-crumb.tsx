@@ -26,7 +26,7 @@ export default function BreadCrumb() {
     const paths = matches.filter((item) => item.pathname !== '/').map((item) => item.pathname);
 
     const pathRouteMetas = flattenedRoutes.filter((item) => paths.indexOf(item.key) !== -1);
-
+    
     let items: AppRouteObject[] | undefined = [...menuRoutes];
     const breadCrumbs = pathRouteMetas.map((routeMeta) => {
       const { key, label } = routeMeta;

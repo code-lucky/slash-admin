@@ -102,7 +102,7 @@ export default function Header({ className = '', offsetTop = false }: Props) {
         }}
         width="auto"
       >
-        <Nav closeSideBarDrawer={() => setDrawerOpen(false)} />
+        {/* <Nav closeSideBarDrawer={() => setDrawerOpen(false)} /> */}
       </Drawer>
     </>
   );

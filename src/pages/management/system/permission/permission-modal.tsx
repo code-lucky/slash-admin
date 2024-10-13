@@ -55,8 +55,8 @@ export default function PermissionModal({
 
   useEffect(() => {
     form.setFieldsValue({ ...formValue });
-    if (formValue.parentId) {
-      const parentName = getParentNameById(formValue.parentId);
+    if (formValue.parent_id) {
+      const parentName = getParentNameById(formValue.parent_id);
       updateCompOptions(parentName);
     }
   }, [formValue, form, getParentNameById]);

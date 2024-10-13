@@ -1,8 +1,7 @@
 import { Button, Card, Popconfirm } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
+import {useState } from 'react';
 
-import { ROLE_LIST } from '@/_mock/assets';
 import { IconButton, Iconify } from '@/components/icon';
 import ProTag from '@/theme/antd/components/tag';
 
@@ -10,17 +9,22 @@ import { RoleModal, RoleModalProps } from './role-modal';
 
 import { Role } from '#/entity';
 import { BasicStatus } from '#/enum';
+import useRoleStore,{useGetRoleList} from '@/store/roleStore';
 
-const ROLES: Role[] = ROLE_LIST;
+// const ROLES: Role[] = ROLE_LIST;
 
 const DEFAULE_ROLE_VALUE: Role = {
   id: '',
   name: '',
   label: '',
   status: BasicStatus.ENABLE,
-  permission: [],
+  description: '',
+  permissions: [],
 };
 export default function RolePage() {
+  useGetRoleList();
+  const roleList = useRoleStore((state) => state.roleList);
+
   const [roleModalPros, setRoleModalProps] = useState<RoleModalProps>({
     formValue: { ...DEFAULE_ROLE_VALUE },
     title: 'New',
@@ -39,11 +43,6 @@ export default function RolePage() {
       width: 300,
     },
     {
-      title: 'Label',
-      dataIndex: 'label',
-    },
-    { title: 'Order', dataIndex: 'order', width: 60 },
-    {
       title: 'Status',
       dataIndex: 'status',
       align: 'center',
@@ -54,7 +53,7 @@ export default function RolePage() {
         </ProTag>
       ),
     },
-    { title: 'Desc', dataIndex: 'desc' },
+    { title: 'Desc', dataIndex: 'description' },
     {
       title: 'Action',
       key: 'operation',
@@ -111,7 +110,7 @@ export default function RolePage() {
         scroll={{ x: 'max-content' }}
         pagination={false}
         columns={columns}
-        dataSource={ROLES}
+        dataSource={roleList}
       />
 
       <RoleModal {...roleModalPros} />

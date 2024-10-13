@@ -84,7 +84,6 @@ export default function Nav(props: Props) {
   const onClick: MenuProps['onClick'] = ({ key }) => {
     // 从扁平化的路由信息里面匹配当前点击的那个
     const nextLink = flattenedRoutes?.find((el) => el.key === key);
-
     // 处理菜单项中，外链的特殊情况
     // 点击外链时，不跳转路由，不在当前项目添加tab，不选中当前路由，新开一个 tab 打开外链
     if (nextLink?.hideTab && nextLink?.frameSrc) {

@@ -1,7 +1,6 @@
 import { Button, Card, Popconfirm } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 
-import { USER_LIST } from '@/_mock/assets';
 import { IconButton, Iconify } from '@/components/icon';
 import { usePathname, useRouter } from '@/router/hooks';
 import ProTag from '@/theme/antd/components/tag';
@@ -9,13 +8,16 @@ import { useThemeToken } from '@/theme/hooks';
 
 import type { Role, UserInfo } from '#/entity';
 import { BasicStatus } from '#/enum';
-
-const USERS: UserInfo[] = USER_LIST;
+import { useGetUserList } from '@/store/userStore';
 
 export default function RolePage() {
   const { colorTextSecondary } = useThemeToken();
   const { push } = useRouter();
   const pathname = usePathname();
+
+  const { data } = useGetUserList();
+
+  console.log('list', data);
 
   const columns: ColumnsType<UserInfo> = [
     {
@@ -96,7 +98,7 @@ export default function RolePage() {
         scroll={{ x: 'max-content' }}
         pagination={false}
         columns={columns}
-        dataSource={USERS}
+        dataSource={data?.list || []}
       />
     </Card>
   );

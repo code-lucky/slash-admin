@@ -8,6 +8,7 @@ import { getItem, removeItem, setItem } from '@/utils/storage';
 
 import { UserInfo, UserToken } from '#/entity';
 import { StorageEnum } from '#/enum';
+import { useEffect } from 'react';
 
 const { VITE_APP_HOMEPAGE: HOMEPAGE } = import.meta.env;
 
@@ -24,7 +25,7 @@ type UserStore = {
 
 const useUserStore = create<UserStore>((set) => ({
   userInfo: getItem<UserInfo>(StorageEnum.User) || {},
-  userToken: getItem<UserToken>(StorageEnum.Token) || {},
+  userToken: getItem<UserToken>(StorageEnum.Token) || {} as UserToken,
   actions: {
     setUserInfo: (userInfo) => {
       set({ userInfo });
@@ -35,7 +36,7 @@ const useUserStore = create<UserStore>((set) => ({
       setItem(StorageEnum.Token, userToken);
     },
     clearUserInfoAndToken() {
-      set({ userInfo: {}, userToken: {} });
+      set({ userInfo: {}, userToken: {} as UserToken });
       removeItem(StorageEnum.User);
       removeItem(StorageEnum.Token);
     },
@@ -46,6 +47,19 @@ export const useUserInfo = () => useUserStore((state) => state.userInfo);
 export const useUserToken = () => useUserStore((state) => state.userToken);
 export const useUserPermission = () => useUserStore((state) => state.userInfo.permissions);
 export const useUserActions = () => useUserStore((state) => state.actions);
+
+export const useGetUserInfo = () => {
+  const { setUserInfo } = useUserActions();
+  const userInfoMutation = useMutation({
+    mutationFn: userService.userInfo,
+  });
+  
+  useEffect(() => {
+    userInfoMutation.mutateAsync().then((res) => {
+      setUserInfo(res);
+    });
+  }, []);
+};
 
 export const useSignIn = () => {
   const navigatge = useNavigate();
@@ -77,6 +91,21 @@ export const useSignIn = () => {
   };
 
   return signIn;
+};
+
+
+export const useGetUserList = () => {
+  const userListMutation = useMutation({
+    mutationFn: userService.userList,
+  });
+
+  useEffect(() => {
+    userListMutation.mutateAsync({ page: 1, limit: 10 }).then((res) => {
+      console.log('res', res);
+    });
+  }, []);
+
+  return userListMutation
 };
 
 export default useUserStore;

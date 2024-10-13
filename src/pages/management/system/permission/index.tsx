@@ -15,7 +15,7 @@ import { BasicStatus, PermissionType } from '#/enum';
 
 const defaultPermissionValue: Permission = {
   id: '',
-  parentId: '',
+  parent_id: '',
   name: '',
   label: '',
   route: '',
@@ -112,7 +112,7 @@ export default function PermissionPage() {
       show: true,
       ...defaultPermissionValue,
       title: 'New',
-      formValue: { ...defaultPermissionValue, parentId: parentId ?? '' },
+      formValue: { ...defaultPermissionValue, parent_id: parentId ?? '' },
     }));
   };
 
