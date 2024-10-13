@@ -50,5 +50,5 @@ export interface Role {
   status: BasicStatus;
   order?: number;
   description?: string;
-  permissions?: Permission[];
+  permission?: Permission[];
 }

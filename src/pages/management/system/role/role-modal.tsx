@@ -1,9 +1,9 @@
 import { Form, Modal, Input, InputNumber, Radio, Tree } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { flattenTrees } from '@/utils/tree';
 
-import { Permission, Role } from '#/entity';
+import { Role } from '#/entity';
 import { BasicStatus } from '#/enum';
 import usePermissionStore, { useGetPermissionList } from '@/store/permission';
 
@@ -15,20 +15,28 @@ export type RoleModalProps = {
   onCancel: VoidFunction;
 };
 export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalProps) {
-
+  console.log('formValue:', formValue);
   useGetPermissionList();
   const { permissionList } = usePermissionStore();
 
   const [form] = Form.useForm();
 
-  const flattenedPermissions = flattenTrees(formValue.permission);
-  const checkedKeys = flattenedPermissions.map((item) => item.id);
+  const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
+  console.log('checkedKeys:', checkedKeys);
+  const handleOk = () => {
+    form.validateFields().then((values) => {
+      console.log('values:', values);
+      onOk();
+    });
+  };
+
   useEffect(() => {
-    form.setFieldsValue({ ...formValue });
+    const selectIds = formValue.permission?.map((item) => item.id) || [];
+    setCheckedKeys(selectIds);
   }, [formValue, form]);
 
   return (
-    <Modal title={title} open={show} onOk={onOk} onCancel={onCancel}>
+    <Modal title={title} open={show} onOk={handleOk} onCancel={onCancel}>
       <Form
         initialValues={formValue}
         form={form}
@@ -55,6 +63,7 @@ export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalP
           <Tree
             checkable
             checkedKeys={checkedKeys}
+            onCheck={(checkedKeysValue) => setCheckedKeys(checkedKeysValue as string[])}
             treeData={permissionList}
             fieldNames={{
               key: 'id',

@@ -19,7 +19,7 @@ const DEFAULE_ROLE_VALUE: Role = {
   label: '',
   status: BasicStatus.ENABLE,
   description: '',
-  permissions: [],
+  permission: [],
 };
 export default function RolePage() {
   useGetRoleList();
