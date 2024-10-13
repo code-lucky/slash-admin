@@ -15,7 +15,6 @@ export type RoleModalProps = {
   onCancel: VoidFunction;
 };
 export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalProps) {
-  console.log('formValue:', formValue);
   useGetPermissionList();
   const { permissionList } = usePermissionStore();
 
