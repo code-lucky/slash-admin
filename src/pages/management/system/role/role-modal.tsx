@@ -1,11 +1,11 @@
 import { Form, Modal, Input, InputNumber, Radio, Tree } from 'antd';
 import { useEffect } from 'react';
 
-import { PERMISSION_LIST } from '@/_mock/assets';
 import { flattenTrees } from '@/utils/tree';
 
 import { Permission, Role } from '#/entity';
 import { BasicStatus } from '#/enum';
+import usePermissionStore, { useGetPermissionList } from '@/store/permission';
 
 export type RoleModalProps = {
   formValue: Role;
@@ -14,8 +14,11 @@ export type RoleModalProps = {
   onOk: VoidFunction;
   onCancel: VoidFunction;
 };
-const PERMISSIONS: Permission[] = PERMISSION_LIST;
 export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalProps) {
+
+  useGetPermissionList();
+  const { permissionList } = usePermissionStore();
+
   const [form] = Form.useForm();
 
   const flattenedPermissions = flattenTrees(formValue.permission);
@@ -37,14 +40,6 @@ export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalP
           <Input />
         </Form.Item>
 
-        <Form.Item<Role> label="Label" name="label" required>
-          <Input />
-        </Form.Item>
-
-        <Form.Item<Role> label="Order" name="order">
-          <InputNumber style={{ width: '100%' }} />
-        </Form.Item>
-
         <Form.Item<Role> label="Status" name="status" required>
           <Radio.Group optionType="button" buttonStyle="solid">
             <Radio value={BasicStatus.ENABLE}> Enable </Radio>
@@ -52,7 +47,7 @@ export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalP
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item<Role> label="Desc" name="desc">
+        <Form.Item<Role> label="Desc" name="description">
           <Input.TextArea />
         </Form.Item>
 
@@ -60,7 +55,7 @@ export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalP
           <Tree
             checkable
             checkedKeys={checkedKeys}
-            treeData={PERMISSIONS}
+            treeData={permissionList}
             fieldNames={{
               key: 'id',
               children: 'children',

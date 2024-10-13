@@ -12,6 +12,7 @@ import PermissionModal, { type PermissionModalProps } from './permission-modal';
 
 import { Permission } from '#/entity';
 import { BasicStatus, PermissionType } from '#/enum';
+import usePermissionStore,{useGetPermissionList} from '@/store/permission';
 
 const defaultPermissionValue: Permission = {
   id: '',
@@ -26,7 +27,8 @@ const defaultPermissionValue: Permission = {
   type: PermissionType.CATALOGUE,
 };
 export default function PermissionPage() {
-  const permissions = useUserPermission();
+  useGetPermissionList();
+  const { permissionList } = usePermissionStore();
   const { t } = useTranslation();
 
   const [permissionModalProps, setPermissionModalProps] = useState<PermissionModalProps>({
@@ -139,7 +141,7 @@ export default function PermissionPage() {
         scroll={{ x: 'max-content' }}
         pagination={false}
         columns={columns}
-        dataSource={permissions}
+        dataSource={permissionList}
       />
 
       <PermissionModal {...permissionModalProps} />
