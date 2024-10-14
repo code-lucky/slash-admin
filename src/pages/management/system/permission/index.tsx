@@ -1,4 +1,4 @@
-import { Button, Card, Popconfirm } from 'antd';
+import { Button, Card, InputNumber, Popconfirm } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import { isNil } from 'ramda';
 import { useState } from 'react';
@@ -30,6 +30,10 @@ export default function PermissionPage() {
   useGetPermissionList();
   const { permissionList } = usePermissionStore();
   const { t } = useTranslation();
+
+  const onSortChange = (id: string, sort: number) => {
+    console.log(id, sort);
+  };
 
   const [permissionModalProps, setPermissionModalProps] = useState<PermissionModalProps>({
     formValue: { ...defaultPermissionValue },
@@ -82,7 +86,18 @@ export default function PermissionPage() {
         </ProTag>
       ),
     },
-    { title: 'Order', dataIndex: 'order', width: 60 },
+    { 
+      title: 'Sort', 
+      dataIndex: 'sort', 
+      width: 60,
+      render: (sort, record) => (
+        <InputNumber
+          style={{ width: '100%' }}
+          value={sort}
+          onChange={(value) => onSortChange(record.id, value as number)}
+        />
+      ),
+    },
     {
       title: 'Action',
       key: 'operation',

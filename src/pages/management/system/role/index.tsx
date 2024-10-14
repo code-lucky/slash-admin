@@ -1,6 +1,6 @@
 import { Button, Card, Popconfirm } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
-import {useState } from 'react';
+import {useEffect, useState } from 'react';
 
 import { IconButton, Iconify } from '@/components/icon';
 import ProTag from '@/theme/antd/components/tag';
@@ -22,15 +22,17 @@ const DEFAULE_ROLE_VALUE: Role = {
   permission: [],
 };
 export default function RolePage() {
-  useGetRoleList();
-  const roleList = useRoleStore((state) => state.roleList);
+  useGetRoleList()
+  const {roleList,} = useRoleStore();
 
+  
   const [roleModalPros, setRoleModalProps] = useState<RoleModalProps>({
     formValue: { ...DEFAULE_ROLE_VALUE },
     title: 'New',
     show: false,
     onOk: () => {
       setRoleModalProps((prev) => ({ ...prev, show: false }));
+      
     },
     onCancel: () => {
       setRoleModalProps((prev) => ({ ...prev, show: false }));

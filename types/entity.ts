@@ -26,6 +26,7 @@ export interface Organization {
 }
 
 export interface Permission {
+  menu_id?: number;
   id: string;
   parent_id: string;
   name: string;

@@ -1,11 +1,12 @@
-import { Form, Modal, Input, InputNumber, Radio, Tree } from 'antd';
+import { Form, Modal, Input, InputNumber, Radio, Tree, message } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { flattenTrees } from '@/utils/tree';
 
 import { Role } from '#/entity';
 import { BasicStatus } from '#/enum';
 import usePermissionStore, { useGetPermissionList } from '@/store/permission';
+import roleService from "@/api/services/roleService";
+import useRoleStore,{useGetRoleList} from '@/store/roleStore';
 
 export type RoleModalProps = {
   formValue: Role;
@@ -21,16 +22,26 @@ export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalP
   const [form] = Form.useForm();
 
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
-  console.log('checkedKeys:', checkedKeys);
   const handleOk = () => {
     form.validateFields().then((values) => {
-      console.log('values:', values);
-      onOk();
+      const permissions = checkedKeys?.map((item) => ({menu_id:item, role_id:formValue.id})) || [];
+      console.log('permissions:', checkedKeys);
+      if(formValue.id){
+        roleService.updateAndAuth({id:formValue.id, ...values, permissions}).then((res) => {
+          message.success('Role updated successfully'); // Success message
+          onOk();
+        });
+      }else{
+        roleService.createAndAuth(values).then((res) => {
+          message.success('Role created successfully'); // Success message
+          onOk();
+        });
+      }
     });
   };
 
   useEffect(() => {
-    const selectIds = formValue.permission?.map((item) => item.id) || [];
+    const selectIds = formValue.permission?.map((item) => item.menu_id) || [];
     setCheckedKeys(selectIds);
   }, [formValue, form]);
 

@@ -90,7 +90,7 @@ export default function PermissionModal({
           <Input />
         </Form.Item>
 
-        <Form.Item<Permission> label="Parent" name="parentId" required>
+        <Form.Item<Permission> label="Parent" name="parent_id" required>
           <TreeSelect
             fieldNames={{
               label: 'name',
@@ -145,7 +145,7 @@ export default function PermissionModal({
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item<Permission> label="Order" name="order">
+        <Form.Item<Permission> label="Sort" name="sort">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
 
