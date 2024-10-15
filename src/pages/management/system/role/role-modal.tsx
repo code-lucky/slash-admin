@@ -6,8 +6,6 @@ import { Role } from '#/entity';
 import { BasicStatus } from '#/enum';
 import usePermissionStore, { useGetPermissionList } from '@/store/permission';
 import roleService from "@/api/services/roleService";
-import useRoleStore,{useGetRoleList} from '@/store/roleStore';
-
 export type RoleModalProps = {
   formValue: Role;
   title: string;
@@ -41,9 +39,9 @@ export function RoleModal({ title, show, formValue, onOk, onCancel }: RoleModalP
   };
 
   useEffect(() => {
-    const selectIds = formValue.permission?.map((item) => item.menu_id) || [];
+    const selectIds = formValue.permission?.map((item) => item.menu_id);
     setCheckedKeys(selectIds);
-  }, [formValue, form]);
+  }, [formValue]);
 
   return (
     <Modal title={title} open={show} onOk={handleOk} onCancel={onCancel}>

@@ -22,17 +22,20 @@ const DEFAULE_ROLE_VALUE: Role = {
   permission: [],
 };
 export default function RolePage() {
-  useGetRoleList()
-  const {roleList,} = useRoleStore();
+  const {getRoleList} = useGetRoleList();
+  const {roleList} = useRoleStore();
 
-  
+  useEffect(() => {
+    getRoleList();
+  }, []);
+
   const [roleModalPros, setRoleModalProps] = useState<RoleModalProps>({
     formValue: { ...DEFAULE_ROLE_VALUE },
     title: 'New',
     show: false,
     onOk: () => {
       setRoleModalProps((prev) => ({ ...prev, show: false }));
-      
+      getRoleList()
     },
     onCancel: () => {
       setRoleModalProps((prev) => ({ ...prev, show: false }));
