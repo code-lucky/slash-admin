@@ -1,7 +1,14 @@
-import { Role } from "#/entity";
+import { Permission, Role } from "#/entity";
 import roleService from "@/api/services/roleService";
-import { useEffect } from "react";
 import { create } from "zustand";
+
+type MenuStore = {
+  menuList: Permission[];
+  menuTree: Permission[];
+  actions: {
+    setMenuList: (menuList: Permission[]) => void;
+  };
+}
 
 type RoleStore = {
   roleList: Role[];

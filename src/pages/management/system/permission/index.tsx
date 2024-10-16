@@ -1,11 +1,10 @@
-import { Button, Card, InputNumber, Popconfirm } from 'antd';
+import { Button, Card, InputNumber, message, Popconfirm } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import { isNil } from 'ramda';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IconButton, Iconify, SvgIcon } from '@/components/icon';
-import { useUserPermission } from '@/store/userStore';
 import ProTag from '@/theme/antd/components/tag';
 
 import PermissionModal, { type PermissionModalProps } from './permission-modal';
@@ -13,6 +12,9 @@ import PermissionModal, { type PermissionModalProps } from './permission-modal';
 import { Permission } from '#/entity';
 import { BasicStatus, PermissionType } from '#/enum';
 import usePermissionStore,{useGetPermissionList} from '@/store/permission';
+import { flattenTrees } from '@/utils/tree';
+
+import menuService from '@/api/services/menuService';
 
 const defaultPermissionValue: Permission = {
   id: '',
@@ -28,12 +30,31 @@ const defaultPermissionValue: Permission = {
 };
 export default function PermissionPage() {
   useGetPermissionList();
-  const { permissionList } = usePermissionStore();
+  // const { permissionList } = usePermissionStore();
+
+  const [permissionList, setPermissionList] = useState<Permission[]>([]);
+
   const { t } = useTranslation();
 
   const onSortChange = (id: string, sort: number) => {
     console.log(id, sort);
   };
+  const onDelete = (id: string) => {
+    menuService.deleteMenu(Number(id)).then((res) => {
+      message.success('Delete success');
+      getPermissionAll();
+    });
+  };
+
+  const getPermissionAll = () => {
+    menuService.menuTree().then((res) => {
+      setPermissionList(res);
+    });
+  };
+
+  useEffect(() => {
+    getPermissionAll();
+  }, []);
 
   const [permissionModalProps, setPermissionModalProps] = useState<PermissionModalProps>({
     formValue: { ...defaultPermissionValue },
@@ -41,9 +62,11 @@ export default function PermissionPage() {
     show: false,
     onOk: () => {
       setPermissionModalProps((prev) => ({ ...prev, show: false }));
+      getPermissionAll();
     },
     onCancel: () => {
       setPermissionModalProps((prev) => ({ ...prev, show: false }));
+      getPermissionAll();
     },
   });
   const columns: ColumnsType<Permission> = [
@@ -113,7 +136,7 @@ export default function PermissionPage() {
           <IconButton onClick={() => onEdit(record)}>
             <Iconify icon="solar:pen-bold-duotone" size={18} />
           </IconButton>
-          <Popconfirm title="Delete the Permission" okText="Yes" cancelText="No" placement="left">
+          <Popconfirm title="Delete the Permission" okText="Yes" onConfirm={() => onDelete(record.id)} cancelText="No" placement="left">
             <IconButton>
               <Iconify icon="mingcute:delete-2-fill" size={18} className="text-error" />
             </IconButton>

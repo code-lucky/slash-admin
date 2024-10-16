@@ -1,4 +1,4 @@
-import { AutoComplete, Form, Input, InputNumber, Modal, Radio, TreeSelect } from 'antd';
+import { AutoComplete, Form, Input, InputNumber, message, Modal, Radio, TreeSelect } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 import { pagesSelect } from '@/router/hooks/use-permission-routes';
@@ -6,6 +6,8 @@ import { useUserPermission } from '@/store/userStore';
 
 import { Permission } from '#/entity';
 import { BasicStatus, PermissionType } from '#/enum';
+
+import menuService from '@/api/services/menuService';
 
 export type PermissionModalProps = {
   formValue: Permission;
@@ -61,8 +63,32 @@ export default function PermissionModal({
     }
   }, [formValue, form, getParentNameById]);
 
+
+  const onSubmit = () => {
+    form.validateFields().then((values) => {
+      const data = {
+        ...values,
+        parent_id: values.parent_id ? values.parent_id : 0,
+      }
+
+      // TODO: 判断是否是新增
+      if (formValue.id) {
+        data.id = formValue.id;
+        menuService.updateMenu(data).then((res) => {
+          message.success('Update success');
+          onOk();
+        });
+      } else {
+        menuService.createMenu(data).then((res) => {
+          message.success('Create success');
+          onOk();
+        });
+      }
+    });
+  };
+
   return (
-    <Modal title={title} open={show} onOk={onOk} onCancel={onCancel}>
+    <Modal title={title} open={show} onOk={onSubmit} onCancel={onCancel}>
       <Form
         initialValues={formValue}
         form={form}
