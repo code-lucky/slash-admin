@@ -11,8 +11,7 @@ import PermissionModal, { type PermissionModalProps } from './permission-modal';
 
 import { Permission } from '#/entity';
 import { BasicStatus, PermissionType } from '#/enum';
-import usePermissionStore,{useGetPermissionList} from '@/store/permission';
-import { flattenTrees } from '@/utils/tree';
+import {useGetPermissionList} from '@/store/permission';
 
 import menuService from '@/api/services/menuService';
 
