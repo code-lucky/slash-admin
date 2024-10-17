@@ -13,8 +13,10 @@ import Nav from './nav';
 import NavHorizontal from './nav-horizontal';
 
 import { ThemeLayout, ThemeMode } from '#/enum';
+import { useGetUserInfo } from '@/store/userStore';
 
 function DashboardLayout() {
+  useGetUserInfo();
   const { colorBgElevated, colorTextBase } = useThemeToken();
   const { themeLayout, themeMode } = useSettings();
 
